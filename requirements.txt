@@ -1,2 +1,6 @@
 streamlit
-openai
+transformers
+huggingface_hub
+langchain
+langchain_community
+datasets
