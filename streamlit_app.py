@@ -24,7 +24,7 @@ error_number = st.selectbox("Choose an error number", errors_list, index=0)
 #error_number = st.text_input("Error Number", placeholder="E.g., 101, 202, etc.")
 
 if st.button("Get Details"):
-    if error_number.strip():
+    if error_number:
         with st.spinner("Retrieving information..."):
             try:
                 # Call the runner method from Inference
