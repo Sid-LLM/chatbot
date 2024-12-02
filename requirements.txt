@@ -4,3 +4,4 @@ huggingface_hub
 langchain
 langchain_community
 datasets
+sentence-transformers
