@@ -1,28 +1,28 @@
 Error,Error No,Error Description,Reasons,Points to check,Temporary Correction steps
 Only in Cleaner,2,Over current fault motor,"Current sensed in Linear Motor 1 - is greater than the over current setting value set in parameter ""000F- Over current setting""
 Spike current time ""0016- Over current sensing time in milli seconds""","1)Motor Current taken at the error point - get using parameter"" 103F with Value ""5"".
-#<Date & Time>#, <Mode>, <Direction>, <Cycle number>, <Pulse count>, <Distance>,<Error_code>,<Reset_Error>
+
 2)Check the table location for any abnormality / height uneven
 3)Check the motor cable for loose connection or cuts.
 4)Check motor carbon brush condition & motor conditions","Reset Error using command ""0010 value FF"""
 Only in Cleaner,4,Over current fault motor -2,"Current sensed in Linear Motor 2 - is greater than the over current setting value set in parameter ""000F- Over current setting""
 Spike current time ""0016- Over current sensing time in milli seconds""","1)Motor Current taken at the error point - get using parameter"" 103F with Value ""5"".
-#<Date & Time>#, <Mode>, <Direction>, <Cycle number>, <Pulse count>, <Distance>,<Error_code>,<Reset_Error>
+
 2)Check the table location for any abnormality / height uneven
 3)Check the motor cable for loose connection or cuts.
 4)Check motor carbon brush condition & motor conditions","Reset Error using command ""0010 value FF"""
 Only in Cleaner,8,Over current fault motor -3,"Current sensed in Brush Motor - is greater than the over current setting value set in parameter ""000F- Over current setting""
 Spike current time ""0016- Over current sensing time in milli seconds""","1)Motor Current taken at the error point - get using parameter"" 103F with Value ""5"".
-#<Date & Time>#, <Mode>, <Direction>, <Cycle number>, <Pulse count>, <Distance>,<Error_code>,<Reset_Error>
+
 2)Check the table location for any abnormality / height uneven
 3)Check the motor cable for loose connection or cuts.
 4)Check motor carbon brush condition & motor conditions","Reset Error using command ""0010 value FF"""
 Occur in Both(TC & Cleaner),10,Minimum battery voltage fault,Battery Voltage is less than 22V (not recommended for Operation),"1)Check if the setting for minimum SOC fault from parameter ""1015""
 2)Check the actual PV charging & SOC from parameter
-""101C""<Vin>,<Iin>,<Vbat>,<Ibat>,<temp>,<soc>,<chargerstate>,<VBAT>,<VPV>,<IMPPT>,<PWR>,<HS_TEMP>,<EXT_TEMP>,<BAT_STATE>,<LOAD_STATE>,<LOAD_TRIP_CNT>”","Reset Error using command ""0010 value FF""
+""101C""","Reset Error using command ""0010 value FF""
 Reduce the minimum SOC value setting in Parameter ""0012"" "
 Occur in Both(TC & Cleaner),20,Over Board temperature fault,PCB board temperature is high ,"1)Get PCB board temperature using ""103F"" with value ""1""
-#<Date & Time>#, <Battery Temperature>, <Drive Temperature>, <Die Temperature>",Power off the PCB for 1 hour & check if the temp of PCB is reduced
+",Power off the PCB for 1 hour & check if the temp of PCB is reduced
 Occur in Both(TC & Cleaner),40,Battery fault,"Battery is not connected to PCB , only operated in PV supply",1)Check battery connection to PCB ,Connect the Battery Power
 Occur in Both(TC & Cleaner),80,Zigbee fault,Wireless Zigbee is faulty in PCB,1) Check Zigbee LED 14 for blinking in PCB,
 Occur in Both(TC & Cleaner),100,RTC fault D8,Real time clock parameters is not set for the 1st time / PCB memory not ok,"1)check if RTC value is set by getting the time from parameter ""100D""","Set the RTC time in Parameter ""000D"""
