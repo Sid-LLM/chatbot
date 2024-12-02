@@ -41,16 +41,15 @@ errors_list = [
 ]
 error_number = st.selectbox("Choose an error number", errors_list, index=0)
 
-# Input Query
-#st.subheader("Enter the Error Number")
-#error_number = st.text_input("Error Number", placeholder="E.g., 101, 202, etc.")
+custom_error = st.text_input("Or enter a custom error number", placeholder="E.g., 707, 808, etc.")
+Query = custom_error if custom_error.strip() else error_number
 
 if st.button("Get Details"):
-    if error_number:
+    if Query:
         with st.spinner("Retrieving information..."):
             try:
                 # Call the runner method from Inference
-                query = f"Provide me information about the error number: {error_number}"
+                query = f"Provide me information about the error number: {Query}"
                 response = rag_inference.runner(query)
                 st.subheader("Results")
                 st.text_area("Response", response, height=300)
