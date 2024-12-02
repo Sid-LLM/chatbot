@@ -14,7 +14,7 @@ from datasets import load_dataset
 
 class Data_processor():
     def __init__(self):
-        self.db = load_dataset('csv', data_files='C:\\Users\Dell\Downloads/errors - Sheet1.csv')
+        self.db = load_dataset('csv', data_files='errors - Sheet1.csv')
         self.source_docs = [
             Document(
                 page_content=f"error : {row['Error']} error_number: {row['Error No']} error_description: {row['Error Description']} reason: {row['Reasons']} points to check: {row['Points to check']} temporary correction step: {row['Temporary Correction steps']}",  # Combine question and answer
