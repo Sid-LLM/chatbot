@@ -1,3 +1,4 @@
+!pip install huggingface_hub transformers langchain langchain_community datasets
 from huggingface_hub import login
 login(token = "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")
 from transformers import HfApiEngine, Tool, ReactJsonAgent
