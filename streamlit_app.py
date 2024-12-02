@@ -36,5 +36,5 @@ if st.button("Get Details"):
 
 # Footer
 st.markdown("---")
-st.markdown("Built with ❤️ using Streamlit and Hugging Face Transformers.")
+st.markdown("Built using Streamlit and Hugging Face Transformers.")
 
