@@ -51,8 +51,8 @@ if st.button("Get Details"):
                 # Call the runner method from Inference
                 query = Query
                 response = rag_inference.runner(query)
-                st.subheader("Results")
-                st.text_area("Response", response, height=300)
+                st.subheader("Error's Details and Solutions")
+                st.text_area(response, height=300)
             except Exception as e:
                 st.error(f"An error occurred: {e}")
     else:
