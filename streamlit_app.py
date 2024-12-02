@@ -13,7 +13,7 @@ st.set_page_config(page_title="Error Resolution Chatbot", layout="centered")
 st.title("Error Resolution Chatbot")
 st.markdown("""
 This app helps you retrieve solutions and details about errors in your product.
-Simply select the error number from the dropdown list, and the chatbot will provide relevant information.
+Simply select the error number from the dropdown list or enter the custom prompt, and the chatbot will provide relevant information.
 """)
 
 errors_list = [
