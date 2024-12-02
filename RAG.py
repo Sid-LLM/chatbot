@@ -55,14 +55,17 @@ class Data_processor():
 
 
 class RAG_tool(Tool):
-    name = "retriever"
-    description = "Using semantic similarity, retrieves some documents from the knowledge base that have the closest embeddings to the input query."
+    name = "Solar Cleaner Troubleshooter"
+    description = """This tool specializes in troubleshooting issues for solar panel robotic cleaners. It uses semantic similarity to retrieve relevant documents from the knowledge base containing details about common errors, their reasons, points to check, and corrective measures. 
+Designed specifically for robotic cleaners equipped with track changers and cleaning mechanisms, this tool ensures precise solutions to user queries.
+"""
     inputs = {
-        "query": {
-            "type": "string",
-            "description": "The query to perform. This should be semantically close to your target documents. Use the affirmative form rather than a question.",
-        }
+    "query": {
+        "type": "string",
+        "description": "Describe the issue or error related to solar panel robotic cleaners. For example: 'Track changer malfunctioning', 'Error 101', 'Cleaner not starting', etc. Use affirmative statements."
     }
+}
+
     output_type = "string"
 
     def __init__(self, vectordb: VectorStore, **kwargs):
