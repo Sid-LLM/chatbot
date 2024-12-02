@@ -16,7 +16,29 @@ This app helps you retrieve solutions and details about errors in your product.
 Simply select the error number from the dropdown list, and the chatbot will provide relevant information.
 """)
 
-errors_list = [2,4,8,10,20,40,80,100,800,10000,20000,40000,80000,100000,200000,400000,800000,1000000,2000000,4000000,8000000]
+errors_list = [
+'Over current fault motor',
+'Over current fault motor -2',
+'Over current fault motor -3',
+'Minimum battery voltage fault',
+'Over Board temperature fault',
+'Battery fault',
+'Zigbee fault',
+'RTC fault D8',
+'Communication fault D11',
+'Invalid data',
+'Missed rows',
+'Invalid distance travelled',
+'Position unknown',
+'Communication error',
+'Cleaner not in position',
+'Cleaner error',
+'Cleaner stall',
+'Track changer stall',
+'TC not in position',
+'Invalid RFID data Error',
+'Invalid Row data Error'
+]
 error_number = st.selectbox("Choose an error number", errors_list, index=0)
 
 # Input Query
