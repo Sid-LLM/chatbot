@@ -25,7 +25,7 @@ if st.button("Get Details"):
         with st.spinner("Retrieving information..."):
             try:
                 # Call the runner method from Inference
-                query = f"Provide details for error number {error_number}"
+                query = f"Provide me information about the error number: {error_number}"
                 response = rag_inference.runner(query)
                 st.subheader("Results")
                 st.text_area("Response", response, height=300)
