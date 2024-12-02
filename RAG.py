@@ -56,9 +56,11 @@ class Data_processor():
 
 class RAG_tool(Tool):
     name = "Solar Cleaner Troubleshooter"
-    description = """This tool specializes in troubleshooting issues for solar panel robotic cleaners. It uses semantic similarity to retrieve relevant documents from the knowledge base containing details about common errors, their reasons, points to check, and corrective measures. 
-Designed specifically for robotic cleaners equipped with track changers and cleaning mechanisms, this tool ensures precise solutions to user queries.
-"""
+    description = (
+        "This tool specializes in identifying and resolving errors for solar panel robotic cleaners, "
+        "including handling composite error codes (e.g., Error 4002 = Error 4000 + Error 2). "
+        "It retrieves troubleshooting steps, reasons, and corrective measures from the knowledge base."
+    )
     inputs = {
     "query": {
         "type": "string",
