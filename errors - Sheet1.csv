@@ -1,0 +1,86 @@
+Error,Error No,Error Description,Reasons,Points to check,Temporary Correction steps
+Only in Cleaner,2,Over current fault motor,"Current sensed in Linear Motor 1 - is greater than the over current setting value set in parameter ""000F- Over current setting""
+Spike current time ""0016- Over current sensing time in milli seconds""","1)Motor Current taken at the error point - get using parameter"" 103F with Value ""5"".
+#<Date & Time>#, <Mode>, <Direction>, <Cycle number>, <Pulse count>, <Distance>,<Error_code>,<Reset_Error>
+2)Check the table location for any abnormality / height uneven
+3)Check the motor cable for loose connection or cuts.
+4)Check motor carbon brush condition & motor conditions","Reset Error using command ""0010 value FF"""
+Only in Cleaner,4,Over current fault motor -2,"Current sensed in Linear Motor 2 - is greater than the over current setting value set in parameter ""000F- Over current setting""
+Spike current time ""0016- Over current sensing time in milli seconds""","1)Motor Current taken at the error point - get using parameter"" 103F with Value ""5"".
+#<Date & Time>#, <Mode>, <Direction>, <Cycle number>, <Pulse count>, <Distance>,<Error_code>,<Reset_Error>
+2)Check the table location for any abnormality / height uneven
+3)Check the motor cable for loose connection or cuts.
+4)Check motor carbon brush condition & motor conditions","Reset Error using command ""0010 value FF"""
+Only in Cleaner,8,Over current fault motor -3,"Current sensed in Brush Motor - is greater than the over current setting value set in parameter ""000F- Over current setting""
+Spike current time ""0016- Over current sensing time in milli seconds""","1)Motor Current taken at the error point - get using parameter"" 103F with Value ""5"".
+#<Date & Time>#, <Mode>, <Direction>, <Cycle number>, <Pulse count>, <Distance>,<Error_code>,<Reset_Error>
+2)Check the table location for any abnormality / height uneven
+3)Check the motor cable for loose connection or cuts.
+4)Check motor carbon brush condition & motor conditions","Reset Error using command ""0010 value FF"""
+Occur in Both(TC & Cleaner),10,Minimum battery voltage fault,Battery Voltage is less than 22V (not recommended for Operation),"1)Check if the setting for minimum SOC fault from parameter ""1015""
+2)Check the actual PV charging & SOC from parameter
+""101C""<Vin>,<Iin>,<Vbat>,<Ibat>,<temp>,<soc>,<chargerstate>,<VBAT>,<VPV>,<IMPPT>,<PWR>,<HS_TEMP>,<EXT_TEMP>,<BAT_STATE>,<LOAD_STATE>,<LOAD_TRIP_CNT>”","Reset Error using command ""0010 value FF""
+Reduce the minimum SOC value setting in Parameter ""0012"" "
+Occur in Both(TC & Cleaner),20,Over Board temperature fault,PCB board temperature is high ,"1)Get PCB board temperature using ""103F"" with value ""1""
+#<Date & Time>#, <Battery Temperature>, <Drive Temperature>, <Die Temperature>",Power off the PCB for 1 hour & check if the temp of PCB is reduced
+Occur in Both(TC & Cleaner),40,Battery fault,"Battery is not connected to PCB , only operated in PV supply",1)Check battery connection to PCB ,Connect the Battery Power
+Occur in Both(TC & Cleaner),80,Zigbee fault,Wireless Zigbee is faulty in PCB,1) Check Zigbee LED 14 for blinking in PCB,
+Occur in Both(TC & Cleaner),100,RTC fault D8,Real time clock parameters is not set for the 1st time / PCB memory not ok,"1)check if RTC value is set by getting the time from parameter ""100D""","Set the RTC time in Parameter ""000D"""
+Only in TC,800,Communication fault D11,Communication breakage between Cleaner ,"1)Check if the TC PCB power is ON during cleaner running time.
+2)Check the setting in Cleaner for parameter in ""1035"" - communication distance in mm between the TC & Cleaner","1)Set the communication distance in cleaner in parameter ""0035"".
+2)Check the battery supply for TC if TC was in power off condition"
+Only in TC,10000,Invalid data,"TC run command is given but Cleaner Row length is not set properly
+TC distance is not set properly to selected rows but run command for TC given",To check the Row length parameters in 0041 to 0047,Set the paramters for TC with respect to Row length
+Only in TC,20000,Missed rows,In case if the trolley hits the limit switch before cleaning the set rows then missed rows error occurs.,"1)Check the limit switch lever 
+2)Check the Cable of the limit switch
+3)Check if Row Sensor is missed the previous row",On clearing the error with 0010 command then the tc continues its operation
+Only in TC,40000,Invalid distance travelled,Trolley moved extra distance than the set row set distance but row not reached (or) Row sensor sensing missed & trolley missed row,"1)Check the distance setting in parameter 0037 , 0038
+2)Check if need to set extra tolarance in paramter 001D
+3) Check if wheel dia of TC is set properly",Correct the parameters of distance between the rows
+Only in TC,80000,Position unknown,Error occurs if the track changer not travelling to next row after cleaner cycle completion or the distance not matched with next row to reach - TC stopped before the home sensor is reached,"1)Check the distance setting in parameter 0037 , 0038
+2)Check if need to set extra tolarance in paramter 001D
+3) Check if wheel dia of TC is set properly",Correct the parameters of distance between the rows
+Only in TC,100000,Communication error,Communication breakage between Cleaner & TC,"Check the setting in Cleaner for parameter in ""1035"" - communication distance in mm between the TC & Cleaner","Set the communication distance in cleaner in parameter ""0035""."
+Only in TC,200000,Cleaner not in position,When the track changer trolley is moving from one row to another row and if cleaner not in position(Cleaner Presence sensor Not Sensing) then the track changer stops it operation and waits for error clear.,"1)Check the top & bottom cleaner presence sensor.
+2)Check if cleaner is moving from home position when TC is in operation
+3)Check if cleaner is reaching the home position for TC to start the next row","1)Set the parameters
+2)Clear error code
+3)Give manual reverse in TC to required distance
+4)Call the run command again"
+Only in TC,400000,Cleaner error,"If cleaner is stopped in middle of the cycle due to error in cleaner, TC gets the error",Check the alarms in cleaner,"1)send clear error code to cleaner 
+2)Send clear error code to TC"
+Only in TC,800000,Cleaner stall,When the cleaner needs to start its operation in its respective row but not started and the cleaner sensors are sensing then cleaner stall error is created,"1)Check cleaner Presence sensor (top & bottom)
+2)Check the cleaner Linear shafts (As cleaner is running without error but actually it is not moving from TC)
+3)Check if the row distance for cleaner is set properly in parameter 0041 , 0042","1)Clear Error Code
+2)Change the mode to manual
+3)Give Manual Reverse to particular distance reverse to the row
+4)Give command 0003 - Value 6, 1=3(Row no to be cleaned) (Or)
+Give command 0035 in TC to clean the specific row"
+Only in TC,1000000,Track changer stall,Track changer is not starting this operation in cycle to travel to next row for a certain time track changer stall error occurs,"Check the TC belt /chain
+Check the wheel slipage
+Check if the firmware on TC is upadated version","
+Steps to Reset & Run
+1)Give Manual Reverse command to move the trolley backwards for around 1 meter & give stop command or wait until reverse limit switch is engaed.(Cmd-0003)
+2)Give Error Reset Command (0010)
+3)Give command 0003 - Value 6, 1=3(Row no to be cleaned) (Or)
+Give command 0035 in TC to clean the specific row"
+Only in TC,2000000,TC not in position,TC moved from home position in front of the row while cleaner is operating .Cleaner will stop at wait position(Cleaner communication distance set in cleaner in parameter 0035) & wait for TC to be manually positioned ,"Rail Level
+TC slipage during cleaner movements
+TC home sensor","1)Change TC to manual mode 
+2)Position TC in front of home sensor by manual command 
+3)Change cleaner to manual mode
+4)Give Reverse command for cleaner to come to TC
+5)Reset TC error
+6)Continue next row by giving command 0003 - Value 6, 1=3(Row no to be cleaned) (Or)
+Give command 0035 in TC to clean the specific row"
+Only in TC,4000000,Invalid RFID data Error,When the track changer senses the home position and if the row RFID doesn’t match then RFID invalid error is created.,"Check the RFID read data in parameter-100E
+Get the RFID set values of the particular row -1039 & check if setting is right
+Check if RFID & home sensor are sensing at same time","1)Clear Error Code
+2)Change the mode to manual
+3)Give Manual Reverse in TC to particular distance reverse to the row
+4)Give command 0003 - Value 6, 1=3(Row no to be cleaned) (Or)
+Give command 0035 in TC to clean the specific row"
+Only in TC,8000000,Invalid Row data Error,In manual mode in track changer if invalid row numbers are given invalid row data error occurs,Check the TC present location & calling row location,"1)Clear error code
+2)Give manual reverse in TC to required distance
+3)Call the run command again
+if not working give daty reset command also"
