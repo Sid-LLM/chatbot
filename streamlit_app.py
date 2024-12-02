@@ -1,50 +1,40 @@
+# app.py
+
 import streamlit as st
+from RAG import Inference
 
-# Show title and description.
-st.title("💬 Chatbot")
+# Initialize the inference object
+rag_inference = Inference()
 
-# Ask user for their OpenAI API key via `st.text_input`.
-# Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
-# via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
-openai_api_key = st.text_input("OpenAI API Key", type="password")
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.", icon="🗝️")
-else:
+# Streamlit app
+st.set_page_config(page_title="Error Resolution Chatbot", layout="centered")
 
-    # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
+# App Title
+st.title("Error Resolution Chatbot")
+st.markdown("""
+This app helps you retrieve solutions and details about errors in your product.
+Simply enter the error number, and the chatbot will provide relevant information.
+""")
 
-    # Create a session state variable to store the chat messages. This ensures that the
-    # messages persist across reruns.
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+# Input Query
+st.subheader("Enter the Error Number")
+error_number = st.text_input("Error Number", placeholder="E.g., 101, 202, etc.")
 
-    # Display the existing chat messages via `st.chat_message`.
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+if st.button("Get Details"):
+    if error_number.strip():
+        with st.spinner("Retrieving information..."):
+            try:
+                # Call the runner method from Inference
+                query = f"Provide details for error number {error_number}"
+                response = rag_inference.runner(query)
+                st.subheader("Results")
+                st.text_area("Response", response, height=300)
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+    else:
+        st.warning("Please enter a valid error number.")
 
-    # Create a chat input field to allow the user to enter a message. This will display
-    # automatically at the bottom of the page.
-    if prompt := st.chat_input("What is up?"):
+# Footer
+st.markdown("---")
+st.markdown("Built with ❤️ using Streamlit and Hugging Face Transformers.")
 
-        # Store and display the current prompt.
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        # Generate a response using the OpenAI API.
-        stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
-            stream=True,
-        )
-
-        # Stream the response to the chat using `st.write_stream`, then store it in 
-        # session state.
-        with st.chat_message("assistant"):
-            response = st.write_stream(stream)
-        st.session_state.messages.append({"role": "assistant", "content": response})
