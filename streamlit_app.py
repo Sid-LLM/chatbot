@@ -17,7 +17,7 @@ Simply select the error number from the dropdown list, and the chatbot will prov
 """)
 
 errors_list = [2,4,8,10,20,40,80,100,800,10000,20000,40000,80000,100000,200000,400000,800000,1000000,2000000,4000000,8000000]
-selected_error = st.selectbox("Choose an error number", errors_list, index=0)
+error_number = st.selectbox("Choose an error number", errors_list, index=0)
 
 # Input Query
 #st.subheader("Enter the Error Number")
@@ -28,7 +28,7 @@ if st.button("Get Details"):
         with st.spinner("Retrieving information..."):
             try:
                 # Call the runner method from Inference
-                query = f"Provide me information about the error number: {selected_error}"
+                query = f"Provide me information about the error number: {error_number}"
                 response = rag_inference.runner(query)
                 st.subheader("Results")
                 st.text_area("Response", response, height=300)
