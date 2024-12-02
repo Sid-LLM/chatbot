@@ -41,7 +41,7 @@ errors_list = [
 ]
 error_number = st.selectbox("Choose an error", errors_list, index=0)
 
-custom_error = st.text_input("Or enter a custom error", placeholder="E.g., 707, 808, etc.")
+custom_error = st.text_input("Or enter a custom error", placeholder="E.g., What does error 4 means and how to resolve it.")
 Query = custom_error if custom_error.strip() else error_number
 
 if st.button("Get Details"):
