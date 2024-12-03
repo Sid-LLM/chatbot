@@ -10,6 +10,7 @@ from langchain.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores.utils import DistanceStrategy
 from datasets import load_dataset
+import pickle
 
 
 class Data_Loader():
