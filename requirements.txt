@@ -6,3 +6,4 @@ langchain_community
 datasets
 sentence_transformers
 faiss-cpu
+pickle
