@@ -12,46 +12,18 @@ from langchain_community.vectorstores.utils import DistanceStrategy
 from datasets import load_dataset
 
 
-class Data_processor():
+class Data_Loader():
     def __init__(self):
-        self.db = load_dataset('csv', data_files='errors - Sheet1.csv')
-        self.source_docs = [
-            Document(
-                page_content=f"error : {row['Error']} error_number: {row['Error No']} error_description: {row['Error Description']} reason: {row['Reasons']} points to check: {row['Points to check']} temporary correction step: {row['Temporary Correction steps']}",  # Combine question and answer
-                metadata={"source" : "errors - Sheet1.csv"}
-            )
-            for row in self.db['train']
-        ]
-    
-    def Text_splitter(self):
-        text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
-            AutoTokenizer.from_pretrained("thenlper/gte-small"),
-            chunk_size=200,
-            add_start_index=True,
-            strip_whitespace=True,
-            separators=["\n\n", "\n", ".", " ", ""],
-        )
-        
-        docs_processed = []
-        unique_texts = {}
-        for doc in tqdm(self.source_docs):
-            new_docs = text_splitter.split_documents([doc])
-            for new_doc in new_docs:
-                if new_doc.page_content not in unique_texts:
-                    unique_texts[new_doc.page_content] = True
-                    docs_processed.append(new_doc)
-        return docs_processed
-                    
-                    
-    def Embedder(self):
-        docs_processed = self.Text_splitter()
-        embedding_model = HuggingFaceEmbeddings(model_name="thenlper/gte-small")
-        vectordb = FAISS.from_documents(
-            documents=docs_processed,
-            embedding=embedding_model,
-            distance_strategy=DistanceStrategy.COSINE,
-        )
-        return vectordb
+        self.metadata_path = 'metadata.pkl'
+        self.faiss_index_path = 'faiss_index'
+        self.embedding_model = "thenlper/gte-small"
+
+    def load_data(self):
+        vectordb = FAISS.load_local(faiss_index_path, embedding_model, allow_dangerous_deserialization = True)
+        with open(metadata_path, "rb") as f:
+            docs_processed = pickle.load(f)
+
+        return vectordb, docs_processed
 
 
 class RAG_tool(Tool):
@@ -88,9 +60,9 @@ class RAG_tool(Tool):
 
 class Inference():
     def __init__(self):
-        self.data_processor = Data_processor()
+        self.data_loader = Data_Loader()
         self.__Model = "Qwen/Qwen2.5-72B-Instruct"
-        self.vectordb = self.data_processor.Embedder()
+        self.vectordb, self.metadata = self.data_loader.load_data()
         rag_tool = RAG_tool(self.vectordb)
         llm_engine = HfApiEngine(self.__Model)
         self.agent = ReactJsonAgent(tools=[rag_tool], llm_engine=llm_engine, max_iterations=4, verbose=2)
