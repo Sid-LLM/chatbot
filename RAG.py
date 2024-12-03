@@ -19,8 +19,8 @@ class Data_Loader():
         self.embedding_model = "thenlper/gte-small"
 
     def load_data(self):
-        vectordb = FAISS.load_local(faiss_index_path, embedding_model, allow_dangerous_deserialization = True)
-        with open(metadata_path, "rb") as f:
+        vectordb = FAISS.load_local(self.faiss_index_path, self.embedding_model, allow_dangerous_deserialization = True)
+        with open(self.metadata_path, "rb") as f:
             docs_processed = pickle.load(f)
 
         return vectordb, docs_processed
