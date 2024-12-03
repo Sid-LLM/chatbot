@@ -10,35 +10,59 @@ from langchain.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores.utils import DistanceStrategy
 from datasets import load_dataset
-import pickle
 
 
-class Data_Loader():
+class Data_processor():
     def __init__(self):
-        self.metadata_path = 'metadata.pkl'
-        self.faiss_index_path = 'faiss_index'
-        self.embedding_model = "thenlper/gte-small"
-
-    def load_data(self):
-        vectordb = FAISS.load_local(self.faiss_index_path, self.embedding_model, allow_dangerous_deserialization = True)
-        with open(self.metadata_path, "rb") as f:
-            docs_processed = pickle.load(f)
-
-        return vectordb, docs_processed
+        self.db = load_dataset('csv', data_files='errors - Sheet1.csv')
+        self.source_docs = [
+            Document(
+                page_content=f"error : {row['Error']} error_number: {row['Error No']} error_description: {row['Error Description']} reason: {row['Reasons']} points to check: {row['Points to check']} temporary correction step: {row['Temporary Correction steps']}",  # Combine question and answer
+                metadata={"source" : "errors - Sheet1.csv"}
+            )
+            for row in self.db['train']
+        ]
+    
+    def Text_splitter(self):
+        text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
+            AutoTokenizer.from_pretrained("thenlper/gte-small"),
+            chunk_size=200,
+            add_start_index=True,
+            strip_whitespace=True,
+            separators=["\n\n", "\n", ".", " ", ""],
+        )
+        
+        docs_processed = []
+        unique_texts = {}
+        for doc in tqdm(self.source_docs):
+            new_docs = text_splitter.split_documents([doc])
+            for new_doc in new_docs:
+                if new_doc.page_content not in unique_texts:
+                    unique_texts[new_doc.page_content] = True
+                    docs_processed.append(new_doc)
+        return docs_processed
+                    
+                    
+    def Embedder(self):
+        docs_processed = self.Text_splitter()
+        embedding_model = HuggingFaceEmbeddings(model_name="thenlper/gte-small")
+        vectordb = FAISS.from_documents(
+            documents=docs_processed,
+            embedding=embedding_model,
+            distance_strategy=DistanceStrategy.COSINE,
+        )
+        return vectordb
 
 
 class RAG_tool(Tool):
-    name = "Solar Cleaner Troubleshooter"
-    description = '''This tool specializes in troubleshooting issues for solar panel robotic cleaners. It uses semantic similarity to retrieve relevant documents from the knowledge base containing details about common errors, their reasons, points to check, and corrective measures. 
-    Designed specifically for robotic cleaners equipped with track changers and cleaning mechanisms, this tool ensures precise solutions to user queries.'''
-
+    name = "retriever"
+    description = "Using semantic similarity, retrieves some documents from the knowledge base that have the closest embeddings to the input query."
     inputs = {
-    "query": {
-        "type": "string",
-        "description": "Describe the issue or error related to solar panel robotic cleaners. For example: 'Track changer malfunctioning', 'Error 101', 'Cleaner not starting', etc. Use affirmative statements."
+        "query": {
+            "type": "string",
+            "description": "The query to perform. This should be semantically close to your target documents. Use the affirmative form rather than a question.",
+        }
     }
-}
-
     output_type = "string"
 
     def __init__(self, vectordb: VectorStore, **kwargs):
@@ -61,9 +85,9 @@ class RAG_tool(Tool):
 
 class Inference():
     def __init__(self):
-        self.data_loader = Data_Loader()
+        self.data_processor = Data_processor()
         self.__Model = "Qwen/Qwen2.5-72B-Instruct"
-        self.vectordb, self.metadata = self.data_loader.load_data()
+        self.vectordb = self.data_processor.Embedder()
         rag_tool = RAG_tool(self.vectordb)
         llm_engine = HfApiEngine(self.__Model)
         self.agent = ReactJsonAgent(tools=[rag_tool], llm_engine=llm_engine, max_iterations=4, verbose=2)
@@ -71,5 +95,3 @@ class Inference():
     
     def runner(self, query : str) -> str:
         return self.agent.run(query)
-    
-    
